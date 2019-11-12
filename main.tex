@@ -1,0 +1,536 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[10pt]{article}
+
+% The automated optical recognition software used to digitize resume
+% information works best with fonts that do not have serifs. This
+% command uses a sans serif font throughout. Uncomment both lines (or at
+% least the second) to restore a Roman font (i.e., a font with serifs).
+%\usepackage{times}
+%\renewcommand{\familydefault}{\sfdefault}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+\usepackage{comment}
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em} %1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}%
+        {\begin{enumerate}{}{%
+%        {\begin{list}{}{%
+       \setlength{\leftmargin}{\bibhang}%
+       \setlength{\itemindent}{-\leftmargin}%
+       \setlength{\itemsep}{\bibsep}%
+       \setlength{\parsep}{\z@}%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{enumerate}\vspace{-.6\baselineskip}}
+%        {\end{list}\vspace{-.6\baselineskip}}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+\usepackage[paper=letterpaper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=1.2in,     % Length of section titles
+            marginparsep=.05in,       % Space between titles and text
+            margin=1in,               % 1 inch margins
+            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+\usepackage[shortlabels]{enumitem}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, \hfill %
+                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+                    \hfill \,}}
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+% (optional argument typesets an object right-justified across from name
+%  as well)
+%
+% Usage: \makeheading{name}
+%        OR
+%        \makeheading[right_object]{name}
+%
+% Place at top of document. It should be the first thing.
+% If ``right_object'' is provided in the square-braced optional
+% argument, it will be right justified on the same line as ``name'' at
+% the top of the CV. For example:
+%
+%       \makeheading[\emph{Curriculum vitae}]{Your Name}
+%
+% will put an emphasized ``Curriculum vitae'' at the top of the document
+% as a title. Likewise, a picture could be included:
+%
+%   \makeheading[\includegraphics[height=1.5in]{my_picutre}]{Your Name}
+%
+% the picture will be flush right across from the name.
+\newcommand{\makeheading}[2][]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+             {\large \bfseries #2 \hfill #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+         \end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+\renewcommand{\section}[1]{\pagebreak[3]%
+    \hyphenpenalty=10000%
+    \vspace{1.3\baselineskip}%
+    \phantomsection\addcontentsline{toc}{section}{#1}%
+    \noindent\llap{\scshape\smash{\parbox[t]{\marginparwidth}{\raggedright #1}}}%
+    \vspace{-\baselineskip}\par}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*]}{\end{itemize}%
+         \vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}}
+
+% An environment IDENTICAL to innerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1,leftmargin=*,parsep=0pt,itemsep=0pt,topsep=0pt,partopsep=0pt]}
+        {\end{itemize}\vspace{-.6\baselineskip}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[3]}
+\newcommand{\halfblankline}{\quad\vspace{-0.5\baselineskip}\pagebreak[3]}
+
+% Uses hyperref to link DOI
+\newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+\newcommand\doi[1]{doi:\doilink{#1}}
+
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% For \email{ADDRESS}, links ADDRESS to the url mailto:ADDRESS
+\providecommand*\email[1]{\href{mailto:#1}{#1}}
+% Same as above, but pretty-prints ADDRESS in teletype fixed-width font
+%\renewcommand*\email[1]{\href{mailto:#1}{\texttt{#1}}}
+
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+%\providecommand\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    \TeX}}
+\providecommand\BibTeX{{B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    \TeX}}
+\providecommand\Matlab{\textsc{Matlab}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{JiaKai Lu}
+
+\section{Contact Information}
+
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+\newlength{\rcollength}\setlength{\rcollength}{1.4in}%
+%
+\begin{tabular}[t]{@{}p{\textwidth-\rcollength}p{\rcollength}}
+%\href{http://www.cse.osu.edu/}%
+%     {Department of Computer Science and Engineering} & \\
+%\href{http://www.osu.edu/}{The Ohio State University}
+85 Cowl Rd. Apt 120.    & 765-252-8131 \\
+Amherst, MA  01002     & \email{jiakailu@umass.edu}\\
+\end{tabular}
+
+%\section{Objective}
+
+%Insert text here if you want to
+%\begin{innerlist}
+%\item More information and auxiliary documents can be found at\\\url{http://www.tedpavlic.com/facjobsearch/}
+%\end{innerlist}
+
+\section{Education}
+
+%\href{http://www.umn.edu}
+{\textbf{Purdue University}},
+West Lafayette, IN
+\begin{outerlist}
+
+\item[] \textbf{Ph.D.}, {\textbf{Mechanical Engineering}}, \hfill Dec. 2014
+        \begin{innerlist}
+        \item Dissertation: \emph{Interfacial dynamics of drop coalescence and impinging liquid jets: effect of viscous, Marangoni and shear-thinning stresses.}
+        \item Co-Advisors:
+%              \href{http://www.biostat.umn.edu/~brad/}
+                   {Carlos M. Corvalan, Ph.D} and
+%              \href{http://www.biostat.umn.edu/~sudiptob/}
+                   {Paul E. Sojka, Ph.D}
+        \end{innerlist}
+
+\item[] \textbf{M.S.},
+%        \href{http://www.sph.umn.edu/biostatistics/}
+             {\textbf{Mechanical Engineering}},
+            \hfill Aug. 2013
+%        \begin{innerlist}
+%        \item Topic: \emph{Assessing the Impact of the Density of Alcohol Establishments on Crime in Minneapolis Neighborhoods Using Univariate and Multivariate Conditionally Autoregressive Models}
+%        \item Advisor:
+%              \href{http://www.biostat.umn.edu/~brad/}
+%                   {Carlos M. Corvalan, Ph.D}
+%        \end{innerlist}
+\end{outerlist}
+\vspace{.1in}
+%\href{http://www.mnsu.edu}
+{\textbf{Shanghai Jiao Tong University}},
+Shanghai, China
+\begin{outerlist}
+\item[] B.S.,
+%        \href{http://www.cset.mnsu.edu/mathstat/}
+             {Mechanical Engineering}, \hfill Jun. 2008
+%        \begin{innerlist}
+%        \item \emph{Summa Cum Laude}
+%        \end{innerlist}
+
+\end{outerlist}
+
+\section{Appointments}
+\textbf{Assistant Professor} \hfill {Sep. 2019 to present}
+\begin{innerlist}
+    \item[] Department of Food Science, University of Massachusetts Amherst
+\end{innerlist}
+
+\textbf{Postdoctoral Research Associate} \hfill {Jan. 2015 to Apr. 2019 }
+\begin{innerlist}
+
+\item[] Department of Food Science, Purdue University\\
+        Supervisor: Carlos M. Corvalan, Ph.D and Osvaldo Campanella, Ph.D
+        \item Investigating biological fluid dynamics in human body (lung, stomach, and intestine) to enhance bioavailability of functional food and drug delivery.
+        \item Developing mathematical models based on microstructural considerations with micellar breaking and reforming for modulation of biofilm interfacial mechancial property. 
+               \item Developing micro-bubble based cleaning method for modern cleaning-in-place (CIP) process for food and petroleum process industry. (funded by \textbf{USDA})
+               
+        \item Developed high fidelity numerical model for non-lithography nanopore manufacturing process.
+ 
+        \item Investigated fouling formation for high sugar content dairy products for  industrial thermal process on a spinning disc apparatus. 
+\end{innerlist}
+\textbf{Research Assistant} \hfill {Aug 2008 to Dec 2014}
+\begin{innerlist}
+
+\item[] School of Mechanical Engineering Purdue University\\
+        Supervisor: Paul E. Sojka, Ph.D and Carlos M. Corvalan, Ph.D
+        \item Developed high fidelity finite element based models for the primary atomization process of jet impingement injector (funded by \textbf{DOD}) 
+        \item Developed a high fidelity finite element based model for the droplet formation of surfactant laden non-Newtonian fluids for mitigation of pesticide spray pollution. (funded by \textbf{USDA})
+\end{innerlist}
+
+\section{Teaching Experience}
+
+%\textbf{Teaching Assistant} \hfill {Springs 2011--12}
+Co-Instructor \hfill {Spring 2017 and 2018}
+\begin{innerlist}
+\item[] ABE/ME 308- Heat and Mass Transfer \\
+with Osvaldo Campanella
+\end{innerlist}
+
+Co-nstructor \hfill {Fall 2013 to Fall 2018}
+\begin{innerlist}
+\item[] FS 342 - Food Process Engineering I\\
+        with Carlos M. Corvalan
+\end{innerlist}
+
+Teaching Assistant \hfill {Fall 2012 to Fall 2018}
+\begin{innerlist}
+\item[] FS 444 - Statistical Quality Control 
+\item[] ABE 591 - Numerical Methods for Biological Science
+\end{innerlist}
+
+\section{Research Interests}
+
+Biological fluid dynamics (lung, gastric and blood), Mechanical properties of cellular membranes, Food and biomaterial processing, Multi-physics/multi-phase flow; Direct Numerical Simulation (DNS) with moving boundary; Spray and Atomization; Interfacial Rheology; Modeling of micro-fluidics.
+
+\section{Refereed Journal Publications}
+\vspace{-.1275in}
+\begin{bibsection}
+     \item {\bf Lu, J.}, M Ferri, S Uba, O Campanella, and Corvalan C.M. , 2019. Contraction of an axi-symmetric shear-thinning cavity~\emph{Phyics of Fluids, special edition Food and Fluids} (invited) 
+     \item {\bf Lu, J.}, and Corvalan, C.M., 2019. Dynamic transition during the collapse of inertial holes~\emph{Scientific Reports}
+      \item {\bf Lu, J.}, Corvalan, C.M., and Jen-Yi Huang 2019. Characterization of soft viscous biofilm using micro-jet impingement~\emph{AICHE Journal} 
+     \item {\bf Lu, J.}, Campana, M. D. and Corvalan, C.M., 2018. Contraction of surfactant-laden pore.\emph{Langmuir}, 10.1021/acs.langmuir.8b00633.
+     \item {\bf Lu, J.}, Corvalan, C.M. and Huang J.Y., 2018. Influence of surface tension gradient of bubble coalescence. \emph{Chemical Engineering Science}.
+     \item Zhang, Y., {\bf Lu, J.}, and Huang, J.Y., 2018. Effect of sugar on whey protein fouling~\emph{Food and Bioproducts Processing}.
+    \item {\bf Lu, J.} and Corvalan, C.M., 2016. Soft food microrheology. \emph{Current Opinion in Food Science}, 9, 112-116.(invited)
+
+   \item {\bf Lu, J.}, Fang, S. and Corvalan, C.M., 2016. Coalescence dynamics of viscous conical drops. \emph{Physical Review E}, 93, 023111-023117
+   
+  \item {\bf Lu, J.}, Yu, J. and Corvalan, C.M., 2015. Universal Scaling Law for the Collapse of Viscous Nanopores.\emph{Langmuir}, 31(31), 8618-8622.
+  
+    \item {\bf Lu, J.} and Corvalan, C.M., 2015. Free-surface dynamics of small pores. \emph{Chemical Engineering Science}, 132, 93-98.
+    \item {\bf Lu, J.} and Corvalan, C.M., 2014. Influence of viscosity on the impingement of laminar liquid jets. \emph{Chemical Engineering Science}, 119: 182-186.
+    
+    \item {\bf Lu, J.} and Corvalan, CM. 2012. Coalescence of viscous drops with surfactants. \emph{Chemical Engineering Science}, 78 (20): 9-13.
+    
+    \item Muddu, R.J., {\bf Lu, J.}, Sojka, P.E. and Corvalan, C.M., 2012. Threshold wavelength on filaments of complex fluids. \emph{Chemical engineering science}, 69(1), 602-606.
+        %To appear \emph{Alcoholism: Clinical and Experimental Research}, 2012.
+
+\end{bibsection}
+
+%\section{Submitted Journal Publications}
+%\vspace{-.125in}
+%\begin{bibsection}
+%    \item Ma D. D., {\bf Lu, J.}, Corvalan, C.M., and Campanelle H. O. 2019 Density change of non-Ficken drying of bioploymers .\emph{Chemical Engineering Science}.
+%    \item {\bf Lu, J.}, and Corvalan, C.M., 2019. Spread of surfactant -- effect of deep layer holes~\emph{Journal of Fluid Mechanics}
+%    \item {\bf Lu, J.}, and Corvalan, C.M., 2019. Microbubble coalescence in Shear-thinning fluids~\emph{Physics of Fluids (fluids in food special edition, invited)}
+%      \item {\bf Lu, J.}, Corvalan, C.M., and Jen-Yi Huang 2019. Characterization of soft viscous biofilm using micro-jet impingement~\emph{AICHE Journal}
+%\end{bibsection}
+
+\section{Conference Abstract and Presentations}
+\begin{bibsection}
+%\begin{innerlist}
+    \item {\bf Lu, J}., and Huang, J.Y.,  Physical approach for reducing environmental footprint in Cleaning-in-Place (invited) , \emph{IFT}
+Chicago, IL. 2018.
+
+    \item {\bf Lu, J}., Corvalan, C.M., Huang, J.Y. Application of jet impingement for biofouling characterization., \emph{Fouling and Cleaning in Food Processing.}
+Lund University, Lund, Sweden. 2018
+    \item {\bf Lu, J}., Corvalan, C.M., Huang, J.Y., Application of jet impingement for
+biofouling characterization and its effective cleaning., \emph{Conference of Food Engineering}
+2016. Columbus, USA. September 12-14, 2016.
+    \item {\bf Lu, J}., Corvalan, C.M., Huang, J.Y., Effect of external geometry of impinging
+jet nozzle on the cohesive removal of fouling layers. \emph{18th World Congress of Food
+Science and Technology}. Dublin, Ireland. August 21-25, 2016.
+   \item {\bf Lu, J}., Corvalan, C.M., Impinging jets of complex fluids, \emph{SIAM Fifth Computational Science and Engineering Conference (CSEC)}, April 1st, 2014. West Lafayette, IN.
+   \item {\bf Lu, J}., Corvalan, C.M., Multiphase flow through porous food matrices. \emph{4th International Conference on Porous Media} , May 14-16, 2012. West Lafayette, IN.
+  \item {\bf Lu, J}., Corvalan, C.M., Surfactant Effects on the Dynamics of Drop Coalescence, \emph{AIChE Annual Meeting}, October 16-21, 2011. Minneapolis, MN.
+  \item Muddu, R., {\bf Lu, J}., Corvalan C.M. \& Sojka, P.E., Effect of perturbation wavelength on jets of complex fluids, \emph{AIChE Annual Meeting}, November 7-12, 2010, Salt Lake City, UT.
+  \item {\bf Lu, J.}, Vaidya, N., Sojka, P.E., \& Corvalan, C.M. Replacement of interfacial proteins by waves of surfactant. Institute of Food Technologists Annual Meeting, July 17-20, 2010, Chicago, IL.
+  \item Vaidya, N., {\bf Lu, J.}, \& Corvalan, C.M. Caking of amorphous food powders: a direct numerical simulation. Institute of Food Technologists Annual Meeting, July 17-20, 2010, Chicago, IL.
+%\end{innerlist}
+\end{bibsection}
+\halfblankline
+
+\section{Awards}
+\begin{innerlist}
+\item Second Place Oral Presentation Competition. Society of Industrial and Applied Math (SIAM) 2014.
+\item First Place Food Engineering Division Paper Competition. Institute of Food Technologists (IFT) 2010.
+\end{innerlist}
+%\end{innerlist}
+
+
+\section{External Grants}
+Agency: USDA, Agriculture and Food Research Initiative (AFRI)
+Title of Grant: Innovative Green Clean-in-Place Technology with Micro-bubbles.\\
+Duration of Funding: 2018-2020\\
+Total Amount of Award: \$996,155\\ 
+Role: Key-Personel  (PI: Jen-Yi Huang)\\
+\\
+%Agency: Beijing YHD Railway Equipment Co Ltd.\\
+%Title of Grant: Stress Measurement in Railroad Rail using Ultrasonic\\
+%Duration of Funding: Sep. 2017 to Dec. 2017\\ 
+%Total Amount of Award: \$20,000\\
+%Role: PI\\
+%\\
+Agency: FDA, FOOD AND DRUG ADMINISTRATION\\
+Title of Grant: Training and Pilot Processing Laboratory Services for Food Processing Technology Courses.\\
+Duration of Funding: Sep. 2016- Sep. 2017\\
+Total Amount of Award: \$101,782\\  
+Role: Co-PI (PI: Dharmendra Mishra)
+
+
+\section{Synergistic Activities}
+FDA Training Course Instructor \hfill {March 2016 -- Present}
+\begin{innerlist}
+\item[] US Food and Drug Administration (FDA) Food Processing Engineering
+\end{innerlist}
+Reviewer \hfill {June 2014 to present}
+\begin{innerlist}
+\item[] Chemical Engineering Science
+%\item[] Physical Review Letter E
+\end{innerlist}
+
+\section{Students Advised (Research, Thesis, Competition)}
+Undergraduate Students 
+\begin{innerlist}
+\item  Jiayun Yu \hfill Schoole of Mechanical Engineering, Purdue University
+\item Shengyang Fang \hfill Schoole of Mechanical Engineering, Purdue University
+\item Kuan-Ting Lee and Yudi Wen. (Academic mentor, won 2nd place in Purdue Soybean competition in 2017) \hfill Department of Food Science, Purdue University
+\item Juan Antonio Velasquez Domingo (visiting student)
+\hfill Food Science and Technology,
+Escuela Agrícola Panamericana El Zamorano.
+
+\end{innerlist}
+Graduate Student
+\begin{innerlist}
+\item DongDong Ma (Master) \hfill Department of ABE, Purdue University
+\item Qian Zhang (Master) \hfill School of Mechanical Engineering, Purdue University
+\item Michele Ferri (Master) \hfill School of Mechanical Engineering, University of Parma 
+\item Renzo Gofini  (Master) \hfill School of Mechanical Engineering, University of Parma 
+\end{innerlist}
+
+
+\section{References}
+
+Carlos M. Corvalan
+\begin{innerlist}
+\item[] Professor \hfill {Phone: 765-494-4665 }\\
+Department of Food Science \hfill{E-mail: corvalac@purdue.edu}\\
+Purdue University
+\end{innerlist}
+
+\halfblankline
+
+Paul E. Sojka
+\begin{innerlist}
+\item[] Professor \hfill {Phone: 765-494-8262}\\
+School of Mechanical Engineering \hfill{E-mail: sojka@ecn.purdue.edu}\\
+Purdue University
+\end{innerlist}
+
+\halfblankline
+
+Osvaldo H. Campanella 
+\begin{innerlist}
+\item[] Professor \hfill {Phone: 612-626-9070}\\
+Department of Agricultural and Biological Engineering \hfill{E-mail: campa@purdue.edu}\\
+Purdue University
+\end{innerlist}
+
+%\section{Hardware and Software Skills}
+\begin{comment}
+Computer Programming:
+%
+\begin{innerlist}
+    \item C, C$+$$+$, Java, JavaScript, NetLogo, Pascal, Perl, PHP,
+        Lisp, UNIX shell scripting (including POSIX.2), GNU make,
+        AppleScript, SQL, MySQL, \Matlab, Maple, Mathematica, and others
+\end{innerlist}
+
+\halfblankline
+\end{comment}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------%
+% The following is copyright and licensing information for
+% redistribution of this LaTeX source code; it also includes a liability
+% statement. If this source code is not being redistributed to others,
+% it may be omitted. It has no effect on the function of the above code.
+%----------------------------------------------------------------------%
+% Copyright (c) 2007, 2008, 2009, 2010, 2011 by Theodore P. Pavlic
+%
+% Unless otherwise expressly stated, this work is licensed under the
+% Creative Commons Attribution-Noncommercial 3.0 United States License. To
+% view a copy of this license, visit
+% http://creativecommons.org/licenses/by-nc/3.0/us/ or send a letter to
+% Creative Commons, 171 Second Street, Suite 300, San Francisco,
+% California, 94105, USA.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+% OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+% MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+% IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+% CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+% TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+% SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+%----------------------------------------------------------------------%
